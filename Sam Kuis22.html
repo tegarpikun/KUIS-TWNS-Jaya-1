@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Kebakaran PT Triwall Natura Surabaya</title>
+    <style>
+        /* CSS RESET & BASE */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0d0d40;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #1a1a6b;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #ffcc00;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ffcc00;
+            padding-bottom: 15px;
+            font-size: 1.6em;
+            text-transform: uppercase;
+        }
+
+        .question-box {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #2b2b8c;
+            border-radius: 12px;
+            border-left: 5px solid #ffcc00;
+        }
+
+        .question-text {
+            font-size: 1.15em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            line-height: 1.6;
+            color: #ffffff;
+        }
+
+        /* TOMBOL & INPUT */
+        .option-button, .next-button {
+            background-color: #4040a1;
+            color: #fff;
+            border: 2px solid #ffcc00;
+            padding: 14px 20px;
+            margin: 10px 0;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            display: block;
+        }
+
+        .option-button:hover:not(:disabled) {
+            background-color: #5555c4;
+            transform: translateX(5px);
+        }
+
+        .next-button {
+            background-color: #ffcc00;
+            color: #0d0d40;
+            text-align: center;
+            font-weight: bold;
+            border: none;
+            margin-top: 20px;
+        }
+
+        .next-button:hover {
+            background-color: #e6b800;
+            transform: scale(1.02);
+        }
+
+        .input-answer {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #ffcc00;
+            background-color: #0d0d40;
+            color: white;
+            font-size: 1.1em;
+            outline: none;
+        }
+
+        /* FEEDBACK */
+        .correct { 
+            background-color: #2e7d32 !important; 
+            border-color: #4CAF50 !important; 
+        }
+        
+        .incorrect { 
+            background-color: #c62828 !important; 
+            border-color: #f44336 !important; 
+        }
+
+        .rationale { 
+            margin-top: 15px; 
+            padding: 15px; 
+            border-radius: 8px;
+            background-color: #3d3d99; 
+            font-size: 0.95em;
+            line-height: 1.5;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #saving-text {
+            margin: 15px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Kuis Pelatihan PT. Tri-wall Natura Surabaya</h1>
+        
+        <div id="name-screen">
+            <div class="question-box">
+                <div class="question-text">Sebelum memulai, masukkan identitas dan departemen Anda, contoh (Alex/RND):</div>
+                <input type="text" id="user-name" class="input-answer" placeholder="Nama Lengkap/Departemen...">
+                <button class="next-button" onclick="startQuiz()">MULAI KUIS</button>
+            </div>
+        </div>
+
+        <div id="quiz-screen" style="display:none;"></div>
+
+        <div id="result-screen" style="display:none; text-align: center;">
+            <h2>Hasil Kuis</h2>
+            <div class="question-box" style="margin-top:20px;">
+                <p id="score-text" style="font-size: 1.3em;"></p>
+                <p id="saving-text" style="color: #ffcc00;">Menyimpan skor...</p>
+            </div>
+            <button class="next-button" onclick="location.reload()">Kerjakan Lagi</button>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvzXdmDtpj0nSU5DxcOpiKGuJNlWqEoCuqk6NcUFNXN9BjSqUG7afMZw-6BuizkGHM/exec';
+
+        const quizData = [
+            { questionNumber: 1, question: "Apabila terjadi kebakaran di Gudang, apa hal pertama yang harus dilakukan?", options: ["menyelamatkan material", "berlari", "pencet tombol emergency", "mengambil apar"], correctAnswer: "pencet tombol emergency", rationale: "Mengaktifkan alarm adalah prioritas untuk evakuasi.", hint: "Tombol darurat." },
+            { questionNumber: 2, question: "Lalu setelah tombol dinyalakan maka, apa yang harus dilakukan?", options: ["berlari dan tidak berkerumun", "membantu teman yang memegang apar", "mengambil air", "berteriak api/kebakaran"], correctAnswer: "berteriak api/kebakaran", rationale: "Memberi peringatan suara agar rekan lain waspada.", hint: "Peringatan suara." },
+            { questionNumber: 3, question: "Setelah mendengar bunyi emergency maka hendaknya saudara lari ke...", options: ["flexo", "gudang 8", "depan pantry", "depan gudang"], correctAnswer: "depan pantry", rationale: "Area ini merupakan Assembly Point resmi.", hint: "Assembly Point." },
+            { questionNumber: 4, question: "Siapa yang boleh mengambil apar dan memadamkan api?", options: ["Yang menyebabkan api", "PIC Gudang/security", "siapa saja", "Mas Rhoma"], correctAnswer: "PIC Gudang/security", rationale: "PIC dan Security telah terlatih menggunakan alat pemadam.", hint: "Personel terlatih." },
+            { questionNumber: 5, question: "Apa yang harus dilakukan jika terjebak asap di dalam gudang?", options: ["Wassalam", "merangkak menghindari asap", "berteriak minta tolong", "diam menunggu"], correctAnswer: "merangkak menghindari asap", rationale: "Udara bersih biasanya berada di bawah lapisan asap.", hint: "Posisi rendah." },
+            { questionNumber: 6, question: "Sebutkan salah satu hal di gudang yang dapat menyebabkan kebakaran?", answerType: "text", correctAnswer: "korsleting listrik, merokok, korek, mesin panas", rationale: "Kelalaian dan faktor teknis bisa memicu api.", hint: "Sumber api atau panas." },
+            { questionNumber: 7, question: "Diletakkan dimana saja APAR biasanya?", answerType: "text", correctAnswer: "dekat pintu masuk, jalur evakuasi", rationale: "Agar mudah dijangkau saat terjadi keadaan darurat.", hint: "Jalan keluar." },
+            { questionNumber: 8, question: "Bagaimana cara memakai APAR?", options: ["tarik pin pengaman dan arahkan selang ke pangkal api", "ditekan tuasnya", "dilemparkan seperti granat", "Tanya Mas Daffa"], correctAnswer: "tarik pin pengaman dan arahkan selang ke pangkal api", rationale: "Ini adalah prosedur standar PASS (Pull, Aim, Squeeze, Sweep).", hint: "Teknik PASS." },
+            { questionNumber: 9, question: "Apa warna APAR?", options: ["merah", "putih", "kuning", "Tanya Mas Daffa"], correctAnswer: "merah", rationale: "Warna standar internasional untuk APAR adalah merah.", hint: "Warna bahaya." },
+            { questionNumber: 10, question: "Apa zat yang ada di dalam APAR?", options: ["Air panas", "Air biasa", "Asap", "CO2/Foam"], correctAnswer: "CO2/Foam", rationale: "Media ini efektif memutus rantai reaksi kimia api.", hint: "Media pemadam." }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userName = "";
+
+        function startQuiz() {
+            const nameInput = document.getElementById('user-name').value;
+            if (nameInput.trim() === "") {
+                alert("Silakan masukkan nama dan departemen Anda!");
+                return;
+            }
+            userName = nameInput;
+            document.getElementById('name-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const current = quizData[currentQuestionIndex];
+            const quizScreen = document.getElementById('quiz-screen');
+            let content = '';
+
+            if (current.answerType === "text") {
+                content = `
+                    <div class="question-box">
+                        <div class="question-text">Soal ${current.questionNumber}/${quizData.length}: ${current.question}</div>
+                        <input type="text" id="text-input" class="input-answer" placeholder="Ketik jawaban di sini...">
+                        <button class="next-button" id="submit-btn" onclick="checkTextAnswer()">KIRIM JAWABAN</button>
+                        <div id="feedback" class="rationale" style="display:none;"></div>
+                    </div>
+                `;
+            } else {
+                const optionsHtml = current.options.map(opt => `<button class="option-button" onclick="checkChoiceAnswer(this, '${opt}')">${opt}</button>`).join('');
+                content = `
+                    <div class="question-box">
+                        <div class="question-text">Soal ${current.questionNumber}/${quizData.length}: ${current.question}</div>
+                        <div>${optionsHtml}</div>
+                        <div id="feedback" class="rationale" style="display:none;"></div>
+                    </div>
+                `;
+            }
+            quizScreen.innerHTML = content;
+        }
+
+        function checkChoiceAnswer(btn, selected) {
+            const current = quizData[currentQuestionIndex];
+            const feedback = document.getElementById('feedback');
+            document.querySelectorAll('.option-button').forEach(b => b.disabled = true);
+
+            if (selected === current.correctAnswer) {
+                btn.classList.add('correct');
+                score++;
+                feedback.innerHTML = `✅ <b>BENAR!</b><br>${current.rationale}`;
+            } else {
+                btn.classList.add('incorrect');
+                feedback.innerHTML = `❌ <b>SALAH!</b><br>Jawaban benar: <b>${current.correctAnswer}</b>`;
+            }
+            feedback.style.display = 'block';
+            addNextButton();
+        }
+
+        function checkTextAnswer() {
+            const current = quizData[currentQuestionIndex];
+            const input = document.getElementById('text-input');
+            const userVal = input.value.toLowerCase().trim();
+            const feedback = document.getElementById('feedback');
+            
+            if (userVal === "") return;
+
+            const validAnswers = current.correctAnswer.split(',').map(a => a.trim().toLowerCase());
+            const isCorrect = validAnswers.some(ans => userVal.includes(ans));
+
+            input.disabled = true;
+            document.getElementById('submit-btn').style.display = 'none';
+
+            if (isCorrect) {
+                score++;
+                input.style.borderColor = "#4CAF50";
+                input.style.backgroundColor = "#1b4332";
+                feedback.innerHTML = `✅ <b>BENAR!</b><br>${current.rationale}`;
+            } else {
+                input.style.borderColor = "#f44336";
+                input.style.backgroundColor = "#4d1616";
+                feedback.innerHTML = `❌ <b>KURANG TEPAT</b><br>Jawaban benar: <b>${current.correctAnswer}</b>`;
+            }
+            feedback.style.display = 'block';
+            addNextButton();
+        }
+
+        function addNextButton() {
+            const btn = document.createElement('button');
+            btn.className = 'next-button';
+            btn.textContent = (currentQuestionIndex < quizData.length - 1) ? 'PERTANYAAN BERIKUTNYA' : 'LIHAT HASIL AKHIR';
+            btn.onclick = () => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizData.length) loadQuestion();
+                else showResult();
+            };
+            document.getElementById('quiz-screen').appendChild(btn);
+        }
+
+        function showResult() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('score-text').innerHTML = `Halo <b>${userName}</b>,<br>Skor Anda: <span style="color:#ffcc00; font-size:1.5em;">${score} / ${quizData.length}</span>`;
+            sendDataToSheet();
+        }
+
+        function sendDataToSheet() {
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({
+                    nama: userName,
+                    skor: score + "/" + quizData.length,
+                    waktu: new Date().toLocaleString('id-ID')
+                }),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(() => {
+                document.getElementById('saving-text').innerHTML = "✅ Skor otomatis tersimpan di Database.";
+                document.getElementById('saving-text').style.color = "#4CAF50";
+            }).catch(() => {
+                document.getElementById('saving-text').innerHTML = "❌ Koneksi Gagal. Skor tidak tersimpan.";
+                document.getElementById('saving-text').style.color = "#f44336";
+            });
+        }
+    </script>
+</body>
+</html>
