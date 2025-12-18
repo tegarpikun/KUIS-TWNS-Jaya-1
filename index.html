@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Kebakaran PT Triwall Natura Surabaya</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Kuis Pelatihan PT. Tri-wall Natura Surabaya</h1>
+        
+        <div id="name-screen">
+            <div class="question-box">
+                <div class="question-text">Sebelum memulai, masukkan identitas dan departemen Anda, contoh (Alex/RND):</div>
+                <input type="text" id="user-name" class="input-answer" placeholder="Nama Lengkap/Departemen...">
+                <button class="next-button" onclick="startQuiz()">MULAI KUIS</button>
+            </div>
+        </div>
+
+        <div id="quiz-screen" style="display:none;"></div>
+
+        <div id="result-screen" style="display:none; text-align: center;">
+            <h2>Hasil Kuis</h2>
+            <div class="question-box" style="margin-top:20px;">
+                <p id="score-text" style="font-size: 1.3em;"></p>
+                <p id="saving-text" style="color: #ffcc00;">Menyimpan skor...</p>
+            </div>
+            <button class="next-button" onclick="location.reload()">Kerjakan Lagi</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
